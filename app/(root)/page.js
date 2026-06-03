@@ -1,3 +1,4 @@
+import HomeFilter from "@/components/filter/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import Routes from "@/constants/routes";
@@ -54,10 +55,24 @@ const questions = [
 ];
 
 const Home = async ({ searchParams }) => {
-  const { query = "" } = await searchParams;
+  const { query = "", filter = "" } = await searchParams;
+
+  // const filteredQuestions = questions.filter((question) => {
+  //   return question.title.toLowerCase().includes(query?.toLowerCase());
+  // });
 
   const filteredQuestions = questions.filter((question) => {
-    return question.title.toLowerCase().includes(query?.toLowerCase());
+    const matchesQuery = question.title
+      .toLowerCase()
+      .includes(query.toLowerCase());
+
+    const matchesFilter =
+      !filter ||
+      question.tags.some(
+        (tag) => tag.name.toLowerCase() === filter.toLowerCase(),
+      );
+
+    return matchesQuery && matchesFilter;
   });
 
   return (
@@ -81,7 +96,7 @@ const Home = async ({ searchParams }) => {
           otherClasses="flex-1"
         />
       </section>
-      {/* Home filters */}
+      <HomeFilter />
       <div className="w-full flex flex-col gap-5 mt-5">
         {filteredQuestions.map((question) => {
           return <h1 key={question._id}>{question.title}</h1>;
