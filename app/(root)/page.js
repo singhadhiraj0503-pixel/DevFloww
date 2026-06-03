@@ -1,30 +1,94 @@
-import { auth, signOut } from "@/auth";
+import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import Routes from "@/constants/routes";
+import Link from "next/link";
 import React from "react";
 
-const page = async () => {
-  const session = await auth();
-  console.log(session);
+const questions = [
+  {
+    _id: "1",
+    title: "How to learn NextJS ?",
+    description: "I want to learn NextJS, can anyone help me ?",
+    tags: [
+      {
+        _id: "1",
+        name: "NextJS",
+      },
+      {
+        _id: "2",
+        name: "Javascript",
+      },
+    ],
+    author: {
+      _id: "1",
+      name: "John Doe",
+    },
+    upvotes: 10,
+    answers: 5,
+    views: 5,
+    createdAt: new Date(),
+  },
+  {
+    _id: "2",
+    title: "How to learn React ?",
+    description: "I want to learn React, can anyone help me ?",
+    tags: [
+      {
+        _id: "1",
+        name: "React",
+      },
+      {
+        _id: "2",
+        name: "Javascript",
+      },
+    ],
+    author: {
+      _id: "1",
+      name: "Johnny Doe",
+    },
+    upvotes: 15,
+    answers: 5,
+    views: 105,
+    createdAt: new Date(),
+  },
+];
+
+const Home = async ({ searchParams }) => {
+  const { query = "" } = await searchParams;
+
+  const filteredQuestions = questions.filter((question) => {
+    return question.title.toLowerCase().includes(query?.toLowerCase());
+  });
 
   return (
-    <div>
-      <h1 className="text-2xl">Welcome to NextJS</h1>
-
-      <form
-        className="mt-10 ml-5"
-        action={async () => {
-          "use server";
-
-          await signOut({ redirectTo: Routes.Sign_in });
-        }}
-      >
-        {/* <Button className="rounded active:scale-95 cursor-pointer">
-          Log out
-        </Button> */}
-      </form>
-    </div>
+    <>
+      <section className="w-full flex items-center justify-between">
+        <h1 className="text-2xl mt-4">All Questions</h1>
+        <Button
+          asChild
+          className="bg-orange-500 text-white text-lg rounded active:scale-95 cursor-pointer font-bold"
+        >
+          <Link className="" href={Routes.ask_question}>
+            Ask a question
+          </Link>
+        </Button>
+      </section>
+      <section className="w-full flex flex-col gap-5 mt-5">
+        <LocalSearch
+          route="/"
+          imgSrc="/icons/search.svg"
+          placeholder="Search Questions..."
+          otherClasses="flex-1"
+        />
+      </section>
+      {/* Home filters */}
+      <div className="w-full flex flex-col gap-5 mt-5">
+        {filteredQuestions.map((question) => {
+          return <h1 key={question._id}>{question.title}</h1>;
+        })}
+      </div>
+    </>
   );
 };
 
-export default page;
+export default Home;
