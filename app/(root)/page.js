@@ -1,3 +1,4 @@
+import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filter/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
@@ -23,6 +24,8 @@ const questions = [
     author: {
       _id: "1",
       name: "John Doe",
+      image:
+        "https://static.vecteezy.com/system/resources/thumbnails/024/183/502/small/male-avatar-portrait-of-a-young-man-with-a-beard-illustration-of-male-character-in-modern-color-style-vector.jpg",
     },
     upvotes: 10,
     answers: 5,
@@ -46,6 +49,8 @@ const questions = [
     author: {
       _id: "1",
       name: "Johnny Doe",
+      image:
+        "https://img.magnific.com/premium-vector/young-man-avatar-character-due-avatar-man-vector-icon-cartoon-illustration_1186924-4438.jpg?semt=ais_hybrid&w=740&q=80",
     },
     upvotes: 15,
     answers: 5,
@@ -99,7 +104,7 @@ const Home = async ({ searchParams }) => {
       <HomeFilter />
       <div className="w-full flex flex-col gap-5 mt-5">
         {filteredQuestions.map((question) => {
-          return <h1 key={question._id}>{question.title}</h1>;
+          return <QuestionCard key={question._id} question={question} />;
         })}
       </div>
     </>

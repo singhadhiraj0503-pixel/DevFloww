@@ -5,6 +5,7 @@ const Routes = {
   Profile: (id) => `/profile/${id}`,
   Tags: (id) => `/tags/${id}`,
   ask_question: "/ask-question",
+  Question: (id) => `/question/${id}`,
 };
 
 export default Routes;
