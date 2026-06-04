@@ -83,39 +83,6 @@ const AuthForm = ({ formType, schema, defaultValues, onSubmit }) => {
                     </Field>
                   )}
                 />
-                {/* <Controller
-                  name="description"
-                  control={form.control}
-                  render={({ field, fieldState }) => (
-                    <Field data-invalid={fieldState.invalid}>
-                      <FieldLabel htmlFor="form-rhf-demo-description">
-                        Description
-                      </FieldLabel>
-                      <InputGroup>
-                        <InputGroupTextarea
-                          {...field}
-                          id="form-rhf-demo-description"
-                          placeholder="I'm having an issue with the login button on mobile."
-                          rows={6}
-                          className="min-h-24 resize-none"
-                          aria-invalid={fieldState.invalid}
-                        />
-                        <InputGroupAddon align="block-end">
-                          <InputGroupText className="tabular-nums">
-                            {field.value.length}/100 characters
-                          </InputGroupText>
-                        </InputGroupAddon>
-                      </InputGroup>
-                      <FieldDescription>
-                        Include steps to reproduce, expected behavior, and what
-                        actually happened.
-                      </FieldDescription>
-                      {fieldState.invalid && (
-                        <FieldError errors={[fieldState.error]} />
-                      )}
-                    </Field>
-                  )}
-                /> */}
               </FieldGroup>
             );
           })}
