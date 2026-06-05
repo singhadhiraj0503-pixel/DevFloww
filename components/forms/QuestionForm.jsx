@@ -138,7 +138,7 @@ const QuestionForm = () => {
           />
         </FieldGroup>
 
-        <FieldGroup className="mb-5">
+        <FieldGroup className="mb-1">
           <Controller
             name="tags"
             control={form.control}
@@ -195,7 +195,7 @@ const QuestionForm = () => {
           />
         </FieldGroup>
 
-        <div className="mt-5 mb-5">
+        <div className="">
           <Button
             type="submit"
             className="text-md font-bold bg-orange-500 text-white rounded active:scale-95 cursor-pointer hover:text-orange-500 hover:bg-white hover:font-bold"
