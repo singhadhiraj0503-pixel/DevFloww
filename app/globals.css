@@ -117,6 +117,48 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Dark mode editor */
+
+.dark .custom-mdx-editor {
+  background: #000;
+  color: white;
+}
+
+.dark .custom-mdx-editor .mdxeditor-root-contenteditable {
+  color: white !important;
+  caret-color: white !important;
+}
+
+.dark .custom-mdx-editor .mdxeditor-root-contenteditable p,
+.dark .custom-mdx-editor .mdxeditor-root-contenteditable span,
+.dark .custom-mdx-editor .mdxeditor-root-contenteditable div {
+  color: white !important;
+}
+
+/* Placeholder text */
+
+.dark
+  .custom-mdx-editor
+  .mdxeditor-root-contenteditable[data-placeholder]:before {
+  color: #888 !important;
+}
+
+/* Toolbar */
+
+.dark .custom-mdx-editor .mdxeditor-toolbar {
+  background: #111827 !important;
+  border-bottom: 1px solid #374151;
+}
+
+.dark .custom-mdx-editor .mdxeditor-toolbar button {
+  color: white !important;
+}
+
+.dark .custom-mdx-editor .mdxeditor-toolbar button svg {
+  color: white !important;
+  fill: currentColor !important;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
