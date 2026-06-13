@@ -3,6 +3,7 @@ import HomeFilter from "@/components/filter/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import Routes from "@/constants/routes";
+import { api } from "@/lib/api";
 import handleError from "@/lib/error";
 import dbConnect from "@/lib/mongoose";
 import Link from "next/link";
@@ -63,14 +64,16 @@ const questions = [
 
 const test = async () => {
   try {
-    await dbConnect();
+    return await api.users.getAll();
   } catch (error) {
     return handleError(error);
   }
 };
 
 const Home = async ({ searchParams }) => {
-  await test();
+  const users = await test();
+  console.log(users);
+
   const { query = "", filter = "" } = await searchParams;
 
   // const filteredQuestions = questions.filter((question) => {

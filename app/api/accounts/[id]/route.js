@@ -21,7 +21,7 @@ export const GET = async (request, { params }) => {
   }
 };
 
-export const POST = async (request, { params }) => {
+export const DELETE = async (request, { params }) => {
   const { id } = await params;
   if (!id) throw new NotFountError("Account");
   try {

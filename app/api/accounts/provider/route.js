@@ -1,6 +1,7 @@
 import accountModel from "@/database/account.model";
 import handleError from "@/lib/error";
 import { NotFountError, ValidationError } from "@/lib/http-errors";
+import dbConnect from "@/lib/mongoose";
 import { AccountSchema } from "@/lib/validation";
 import { NextResponse } from "next/server";
 import { success } from "zod";
@@ -8,6 +9,8 @@ import { success } from "zod";
 export const POST = async (request) => {
   const { providerAccountId } = await request.json();
   try {
+    await dbConnect();
+
     const validateData = AccountSchema.partial().safeParse({
       providerAccountId,
     });
