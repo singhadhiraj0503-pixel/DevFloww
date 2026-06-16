@@ -1,5 +1,5 @@
 const { Schema, model, models } = require("mongoose");
-required: tre;
+// required: tre;
 const accountSchema = new Schema(
   {
     userId: {
