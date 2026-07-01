@@ -3,6 +3,7 @@ import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
+// import { toast } from "shadcn";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,6 +30,7 @@ import {
 } from "@/components/ui/input-group";
 import Link from "next/link";
 import Routes from "@/constants/routes";
+import { useRouter } from "next/navigation";
 
 // const formSchema = z.object({
 //   title: z
@@ -42,23 +44,57 @@ import Routes from "@/constants/routes";
 // });
 
 const AuthForm = ({ formType, schema, defaultValues, onSubmit }) => {
+  const router = useRouter();
+
   const form = useForm({
     resolver: zodResolver(schema),
-    defaultValues: defaultValues,
+    defaultValues,
   });
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async (data) => {
+    // data.preventDefault();
+    console.log("SUBMITTED");
+    console.log(data);
+    try {
+      const result = await onSubmit(data);
+
+      console.log(result);
+
+      if (result?.success) {
+        toast.success(
+          formType === "SIGN_IN"
+            ? "Signed in successfully"
+            : "Signed up successfully",
+        );
+
+        router.push(Routes.Home);
+        return;
+      }
+
+      toast.error(result?.error?.message || "Something went wrong");
+    } catch (err) {
+      console.error(err);
+
+      toast.error(err.message || "Unexpected server error");
+    }
+  };
 
   const buttonText = formType === "SIGN_IN" ? "Sign-In" : "Sign-Up";
 
   return (
-    <Card className="w-full mt-5 sm:max-w-md rounded">
+    <Card className="w-full mt-3 sm:max-w-md rounded">
       <CardHeader>{/* <CardTitle>Sign-In Form</CardTitle> */}</CardHeader>
       <CardContent>
-        <form id="form-rhf-demo" onSubmit={handleSubmit}>
+        <form
+          id="form-rhf-demo"
+          onSubmit={form.handleSubmit(handleSubmit, (errors) => {
+            console.log(errors);
+          })}
+          // onSubmit={handleSubmit}
+        >
           {Object.keys(defaultValues).map((field) => {
             return (
-              <FieldGroup className="mb-5" key={field}>
+              <FieldGroup className="mb-4" key={field}>
                 <Controller
                   name={field}
                   control={form.control}
@@ -86,6 +122,48 @@ const AuthForm = ({ formType, schema, defaultValues, onSubmit }) => {
               </FieldGroup>
             );
           })}
+          {/* <Field className="w-full flex flex-col" orientation="horizontal">
+            <div className="w-full flex justify-center gap-10">
+              <Button
+                className="bg-gray-700 text-white font-bold rounded active:scale-95"
+                type="button"
+                variant="outline"
+                onClick={() => form.reset()}
+              >
+                Reset
+              </Button>
+              <Button
+                className="bg-orange-500 text-white font-bold rounded active:scale-95"
+                type="submit"
+                form="form-rhf-demo"
+              >
+                Submit
+              </Button>
+            </div>
+            <div>
+              {formType === "SIGN_IN" ? (
+                <p className="mt-2">
+                  Dont have an account?{" "}
+                  <Link
+                    className="italic underline text-orange-500"
+                    href={Routes.Sign_up}
+                  >
+                    Sign-up
+                  </Link>
+                </p>
+              ) : (
+                <p className="mt-2">
+                  Already have an account?{" "}
+                  <Link
+                    className="italic underline text-orange-500"
+                    href={Routes.Sign_in}
+                  >
+                    Sign-in
+                  </Link>
+                </p>
+              )}
+            </div>
+          </Field> */}
         </form>
       </CardContent>
       <CardFooter>
