@@ -73,8 +73,8 @@ const test = async () => {
 
 const Home = async ({ searchParams }) => {
   const users = await test();
-  const session = await auth();
-  console.log("Session :", session);
+  // const session = await auth();
+  // console.log("Session :", session);
 
   const { query = "", filter = "" } = await searchParams;
 

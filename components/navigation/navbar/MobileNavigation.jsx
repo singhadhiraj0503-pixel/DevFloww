@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import React from "react";
 import {
@@ -16,8 +16,13 @@ import Link from "next/link";
 import Routes from "@/constants/routes";
 import { Button } from "@/components/ui/button";
 import NavLinks from "./NavLinks";
+import { auth, signOut } from "@/auth";
+import { LogOut } from "lucide-react";
 
-const MobileNavigation = () => {
+const MobileNavigation = async () => {
+  const session = await auth();
+  const userId = session?.user?.id;
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -48,7 +53,45 @@ const MobileNavigation = () => {
           </SheetClose>
 
           <div className="h-full flex flex-col justify-end gap-2">
-            <SheetClose className="w-full" asChild>
+            {userId ? (
+              <SheetClose asChild>
+                <form
+                  action={async () => {
+                    "use server";
+
+                    await signOut();
+                  }}
+                >
+                  <Button
+                    type="submit"
+                    className=" lg:flex gap-3 w-full bg-black text-orange-500 font-bold text-md p-5 rounded cursor-pointer active:scale-95"
+                  >
+                    <LogOut size={40} />
+                    <span>Logout</span>
+                  </Button>
+                </form>
+              </SheetClose>
+            ) : (
+              <>
+                <SheetClose className="w-full" asChild>
+                  <Link href={Routes.Sign_in}>
+                    <Button className="w-full bg-gray-900 text-orange-500 font-bold border-none rounded active:scale-95">
+                      Log In
+                    </Button>
+                  </Link>
+                </SheetClose>
+
+                <SheetClose className="w-full" asChild>
+                  <Link href={Routes.Sign_up}>
+                    <Button className="w-full bg-gray-600 text-white font-bold border-none rounded active:scale-95">
+                      Sign Up
+                    </Button>
+                  </Link>
+                </SheetClose>
+              </>
+            )}
+
+            {/* <SheetClose className="w-full" asChild>
               <Link href={Routes.Sign_in}>
                 <Button className="w-full bg-gray-900 text-orange-500 font-bold border-none rounded active:scale-95">
                   Log In
@@ -62,7 +105,7 @@ const MobileNavigation = () => {
                   Sign Up
                 </Button>
               </Link>
-            </SheetClose>
+            </SheetClose> */}
           </div>
         </SheetHeader>
       </SheetContent>

@@ -4,8 +4,13 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import Routes from "@/constants/routes";
 import Image from "next/image";
+import { auth, signOut } from "@/auth";
+import { LogOut } from "lucide-react";
 
-const LeftSidebar = () => {
+const LeftSidebar = async () => {
+  const session = await auth();
+  const userId = session?.user?.id;
+
   return (
     // <section className="h-screen bg-gray-900 flex flex-col justify-between overflow-y-auto border-r p-4 pt-22 max-sm:hidden">
     //   <div className="flex flex-col">
@@ -47,11 +52,75 @@ const LeftSidebar = () => {
     // </section>
 
     <section className="h-screen bg-gray-900 flex flex-col justify-between border-r p-4 pt-22 max-sm:hidden">
-      <NavLinks />
+      <NavLinks userId={userId} />
 
       <div className="flex flex-col gap-3">
+        {userId ? (
+          <form
+            action={async () => {
+              "use server";
+
+              await signOut();
+            }}
+          >
+            <Button
+              type="submit"
+              className="hidden lg:flex gap-3 w-full bg-black text-orange-500 font-bold text-md p-5 rounded cursor-pointer active:scale-95"
+            >
+              <LogOut size={40} />
+              <span>Logout</span>
+            </Button>
+          </form>
+        ) : (
+          <>
+            {/* Mobile Login Icon */}
+            <Link
+              href={Routes.Sign_in}
+              className="flex lg:hidden items-center justify-center"
+            >
+              <Image
+                src="/icons/account.svg"
+                width={24}
+                height={24}
+                alt="Login"
+                className=""
+              />
+            </Link>
+
+            {/* Desktop Login Button */}
+            <Button
+              asChild
+              className="hidden lg:flex w-full bg-black text-orange-500 font-bold"
+            >
+              <Link href={Routes.Sign_in}>Log In</Link>
+            </Button>
+
+            {/* Mobile Signup Icon */}
+            <Link
+              href={Routes.Sign_up}
+              className="flex lg:hidden items-center justify-center"
+            >
+              <Image
+                src="/icons/sign-up.svg"
+                width={24}
+                height={24}
+                alt="Sign Up"
+                className=""
+              />
+            </Link>
+
+            {/* Desktop Signup Button */}
+            <Button
+              asChild
+              className="hidden lg:flex w-full bg-gray-600 text-white font-bold"
+            >
+              <Link href={Routes.Sign_up}>Sign Up</Link>
+            </Button>
+          </>
+        )}
+
         {/* Mobile Login Icon */}
-        <Link
+        {/* <Link
           href={Routes.Sign_in}
           className="flex lg:hidden items-center justify-center"
         >
@@ -62,18 +131,18 @@ const LeftSidebar = () => {
             alt="Login"
             className=""
           />
-        </Link>
+        </Link> */}
 
         {/* Desktop Login Button */}
-        <Button
+        {/* <Button
           asChild
           className="hidden lg:flex w-full bg-black text-orange-500 font-bold"
         >
           <Link href={Routes.Sign_in}>Log In</Link>
-        </Button>
+        </Button> */}
 
         {/* Mobile Signup Icon */}
-        <Link
+        {/* <Link
           href={Routes.Sign_up}
           className="flex lg:hidden items-center justify-center"
         >
@@ -84,15 +153,15 @@ const LeftSidebar = () => {
             alt="Sign Up"
             className=""
           />
-        </Link>
+        </Link> */}
 
         {/* Desktop Signup Button */}
-        <Button
+        {/* <Button
           asChild
           className="hidden lg:flex w-full bg-gray-600 text-white font-bold"
         >
           <Link href={Routes.Sign_up}>Sign Up</Link>
-        </Button>
+        </Button> */}
       </div>
     </section>
   );

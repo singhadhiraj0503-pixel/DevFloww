@@ -8,6 +8,11 @@ const nextConfig = {
         // hostname: "static.vecteezy.com",
         hostname: "**",
       },
+      // {
+      //   protocol: "https",
+      //   hostname: "lh3.googleusercontent.com",
+      //   port: "",
+      // },
     ],
   },
   reactCompiler: true,
