@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useTransition } from "react";
 import { AskQuestionSchema } from "@/lib/validation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,6 +10,11 @@ import { Input } from "../ui/input";
 import dynamic from "next/dynamic";
 import { Button } from "../ui/button";
 import TagCard from "../cards/TagCard";
+import { createQuestion } from "@/lib/actions/question.action";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import Routes from "@/constants/routes";
+import { ReloadIcon } from "@radix-ui/react-icons";
 
 const Editor = dynamic(() => import("@/components/editor/index"), {
   // Make sure we turn SSR off
@@ -17,7 +22,9 @@ const Editor = dynamic(() => import("@/components/editor/index"), {
 });
 
 const QuestionForm = () => {
+  const router = useRouter();
   const editorRef = useRef();
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm({
     resolver: zodResolver(AskQuestionSchema),
@@ -65,8 +72,19 @@ const QuestionForm = () => {
     }
   };
 
-  const handleCreateQuestion = (data) => {
-    console.log(data);
+  const handleCreateQuestion = async (data) => {
+    startTransition(async () => {
+      const result = await createQuestion(data);
+
+      if (result.success) {
+        toast.success("Question created successfully");
+
+        console.log(result);
+        if (result.data) router.push(Routes.Question(result.data?._id));
+      } else {
+        toast.error(result.error?.message || "Something went wrong");
+      }
+    });
   };
 
   return (
@@ -198,9 +216,17 @@ const QuestionForm = () => {
         <div className="">
           <Button
             type="submit"
+            disabled={isPending}
             className="text-md font-bold bg-orange-500 text-white rounded active:scale-95 cursor-pointer hover:text-orange-500 hover:bg-white hover:font-bold"
           >
-            Submit Question
+            {isPending ? (
+              <>
+                <ReloadIcon className="mr-2 size-4 animate-spin" />
+                <span>Submitting</span>
+              </>
+            ) : (
+              <>Submit Question</>
+            )}
           </Button>
         </div>
       </form>

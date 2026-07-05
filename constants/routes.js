@@ -5,7 +5,7 @@ const Routes = {
   Profile: (id) => `/profile/${id}`,
   Tags: (id) => `/tags/${id}`,
   ask_question: "/ask-question",
-  Question: (id) => `/question/${id}`,
+  Question: (id) => `/questions/${id}`,
   SIGN_IN_WITH_OAUTH: `signin-with-oauth`,
 };
 
