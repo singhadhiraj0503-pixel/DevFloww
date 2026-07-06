@@ -13,7 +13,7 @@ const questionSchema = new Schema(
     tags: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Tag",
+        ref: "Tags",
       },
     ],
     views: {

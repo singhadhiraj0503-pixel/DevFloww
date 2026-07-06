@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useTransition } from "react";
-import { AskQuestionSchema } from "@/lib/validation";
+import { AskQuestionSchema, EditQuestionSchema } from "@/lib/validation";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormDescription } from "../ui/form";
@@ -10,28 +10,29 @@ import { Input } from "../ui/input";
 import dynamic from "next/dynamic";
 import { Button } from "../ui/button";
 import TagCard from "../cards/TagCard";
-import { createQuestion } from "@/lib/actions/question.action";
+import { createQuestion, editQuestion } from "@/lib/actions/question.action";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Routes from "@/constants/routes";
 import { ReloadIcon } from "@radix-ui/react-icons";
+import { id } from "zod/v4/locales";
 
 const Editor = dynamic(() => import("@/components/editor/index"), {
   // Make sure we turn SSR off
   ssr: false,
 });
 
-const QuestionForm = () => {
+const QuestionForm = ({ question, isEdit = false }) => {
   const router = useRouter();
   const editorRef = useRef();
   const [isPending, startTransition] = useTransition();
 
   const form = useForm({
-    resolver: zodResolver(AskQuestionSchema),
+    resolver: zodResolver(isEdit ? EditQuestionSchema : AskQuestionSchema),
     defaultValues: {
-      title: "",
-      content: "",
-      tags: [],
+      title: question?.title || "",
+      content: question?.content || "",
+      tags: question?.tags.map((tag) => tag.name) || [],
     },
   });
 
@@ -74,6 +75,29 @@ const QuestionForm = () => {
 
   const handleCreateQuestion = async (data) => {
     startTransition(async () => {
+      if (isEdit && question) {
+        const result = await editQuestion({
+          questionId: question?._id,
+          ...data,
+        });
+
+        console.log(result);
+
+        // const result = await getQuestion({ questionId: id });
+
+        // console.log("GET QUESTION:", result);
+
+        if (result.success) {
+          toast.success("Question updated successfully");
+
+          console.log(result);
+          if (result.data) router.push(Routes.Question(result.data?._id));
+        } else {
+          toast.error(result.error?.message || "Something went wrong");
+        }
+        return;
+      }
+
       const result = await createQuestion(data);
 
       if (result.success) {
@@ -182,10 +206,13 @@ const QuestionForm = () => {
                     />
                     {field.value.length > 0 && (
                       <div className="flex">
-                        {field?.value?.map((tag) => {
+                        {field?.value?.map((tag, index) => {
+                          // console.log("Question Tags:", question?.tags);
+                          // console.log("Form Tags:", form.getValues("tags"));
                           return (
                             <TagCard
-                              key={tag}
+                              // key={tag}
+                              key={`${tag}-${index}`}
                               _id={tag}
                               name={tag}
                               compact
@@ -225,7 +252,7 @@ const QuestionForm = () => {
                 <span>Submitting</span>
               </>
             ) : (
-              <>Submit Question</>
+              <>{isEdit ? "Edit" : "Submit Question"}</>
             )}
           </Button>
         </div>
