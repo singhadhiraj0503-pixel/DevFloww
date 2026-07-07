@@ -15,7 +15,6 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Routes from "@/constants/routes";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { id } from "zod/v4/locales";
 
 const Editor = dynamic(() => import("@/components/editor/index"), {
   // Make sure we turn SSR off
@@ -28,7 +27,7 @@ const QuestionForm = ({ question, isEdit = false }) => {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm({
-    resolver: zodResolver(isEdit ? EditQuestionSchema : AskQuestionSchema),
+    // resolver: zodResolver(isEdit ? EditQuestionSchema : AskQuestionSchema),
     defaultValues: {
       title: question?.title || "",
       content: question?.content || "",
@@ -74,40 +73,77 @@ const QuestionForm = ({ question, isEdit = false }) => {
   };
 
   const handleCreateQuestion = async (data) => {
+    // startTransition(async () => {
+    //   if (isEdit && question) {
+    //     const result = await editQuestion({
+    //       questionId: question?._id,
+    //       ...data,
+    //     });
+
+    //     console.log(result);
+
+    //     // const result = await getQuestion({ questionId: id });
+
+    //     // console.log("GET QUESTION:", result);
+
+    //     if (result.success) {
+    //       toast.success("Question updated successfully");
+
+    //       console.log(result);
+    //       if (result.data) router.push(Routes.Question(result.data?._id));
+    //     } else {
+    //       toast.error(result.error?.message || "Something went wrong");
+    //     }
+    //     return;
+    //   }
+
+    //   const result = await createQuestion(data);
+
+    //   if (result.success) {
+    //     toast.success("Question created successfully");
+
+    //     // console.log(result);
+    //     if (result.data) router.push(Routes.Question(result.data?._id));
+    //   } else {
+    //     toast.error(result.error?.message || "Something went wrong");
+    //   }
+    // });
+
+    // const result = await createQuestion(data);
+
+    // console.log(result);
+
     startTransition(async () => {
-      if (isEdit && question) {
-        const result = await editQuestion({
-          questionId: question?._id,
+      let result;
+
+      if (isEdit) {
+        result = await editQuestion({
+          questionId: question._id,
           ...data,
         });
 
-        console.log(result);
-
-        // const result = await getQuestion({ questionId: id });
-
-        // console.log("GET QUESTION:", result);
-
-        if (result.success) {
-          toast.success("Question updated successfully");
-
-          console.log(result);
-          if (result.data) router.push(Routes.Question(result.data?._id));
-        } else {
-          toast.error(result.error?.message || "Something went wrong");
+        if (!result.success) {
+          toast.error(result.error?.message);
+          return;
         }
+
+        toast.success("Question updated successfully");
+
+        router.push(Routes.Question(result.data._id));
+
         return;
       }
 
-      const result = await createQuestion(data);
+      result = await createQuestion(data);
 
-      if (result.success) {
-        toast.success("Question created successfully");
-
-        console.log(result);
-        if (result.data) router.push(Routes.Question(result.data?._id));
-      } else {
-        toast.error(result.error?.message || "Something went wrong");
+      if (!result.success) {
+        toast.error(result.error?.message);
+        return;
       }
+
+      toast.success("Question created successfully");
+
+      router.push(Routes.Question(result.data._id));
     });
   };
 
@@ -116,7 +152,20 @@ const QuestionForm = ({ question, isEdit = false }) => {
       <form
         action=""
         className="w-full flex flex-col gap-5"
-        onSubmit={form.handleSubmit(handleCreateQuestion)}
+        // onSubmit={form.handleSubmit(handleCreateQuestion)}
+        onSubmit={(e) => {
+          e.preventDefault();
+          console.log("FORM SUBMIT");
+          console.log(form.getValues());
+          console.log(form.formState.errors);
+
+          form.handleSubmit((data) => {
+            console.log("INSIDE CALLBACK");
+            console.log(data);
+
+            handleCreateQuestion(data);
+          })(e);
+        }}
       >
         <FieldGroup className="mb-5">
           <Controller
@@ -161,8 +210,6 @@ const QuestionForm = ({ question, isEdit = false }) => {
                 </FieldLabel>
                 <FormControl>
                   <Editor
-                    // markdown={field.value || ""}
-                    // onChange={field.onChange}
                     value={field.value}
                     editorRef={editorRef}
                     fieldChange={field.onChange}

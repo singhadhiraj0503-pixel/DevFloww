@@ -58,7 +58,19 @@ const RightSidebar = () => {
   ];
 
   return (
-    <section className="pt-18 w-100 h-screen bg-gray-900 flex flex-col overflow-y-auto border-l max-lg:hidden">
+    // <section className="pt-18 w-100 h-screen bg-gray-900 flex flex-col overflow-y-auto border-l max-lg:hidden">
+    <section
+      className="
+    sticky
+    top-[80px]
+    h-[calc(100vh-80px)]
+    w-100
+    bg-gray-900
+    border-l
+    overflow-y-auto
+    max-lg:hidden
+  "
+    >
       <div className="px-4">
         <h3 className="text-center mb-5 py-2 rounded text-xl bg-orange-500 text-white font-bold">
           Top Questions

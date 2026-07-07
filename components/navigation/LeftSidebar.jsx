@@ -51,7 +51,22 @@ const LeftSidebar = async () => {
     //   </div>
     // </section>
 
-    <section className="h-screen bg-gray-900 flex flex-col justify-between border-r p-4 pt-22 max-sm:hidden">
+    // <section className="h-screen bg-gray-900 flex flex-col justify-between border-r p-4 pt-22 max-sm:hidden">
+    <section
+      className="
+    sticky
+    top-[80px]
+    h-[calc(100vh-80px)]
+    bg-gray-900
+    border-r
+    p-4
+    flex
+    flex-col
+    justify-between
+    overflow-y-auto
+    max-sm:hidden
+  "
+    >
       <NavLinks userId={userId} />
 
       <div className="flex flex-col gap-3">
