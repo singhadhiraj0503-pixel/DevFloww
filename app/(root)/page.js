@@ -1,9 +1,11 @@
 import { auth } from "@/auth";
 import QuestionCard from "@/components/cards/QuestionCard";
+import DataRender from "@/components/DataRender";
 import HomeFilter from "@/components/filter/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import Routes from "@/constants/routes";
+import { EMPTY_QUESTION } from "@/constants/state";
 import { getQuestions } from "@/lib/actions/question.action";
 import { api } from "@/lib/api";
 import handleError from "@/lib/error";
@@ -117,7 +119,22 @@ const Home = async ({ searchParams }) => {
         />
       </section>
       <HomeFilter />
-      {success ? (
+
+      <DataRender
+        success={success}
+        error={error}
+        data={questions}
+        empty={EMPTY_QUESTION}
+        render={(question) => (
+          <div className="w-full flex flex-col gap-3 mt-4">
+            {questions.map((question) => (
+              <QuestionCard key={question._id} question={question} />
+            ))}
+          </div>
+        )}
+      />
+
+      {/* {success ? (
         <div className="w-full flex flex-col gap-5 mt-5">
           {questions && questions.length > 0 ? (
             questions.map((question) => (
@@ -135,7 +152,7 @@ const Home = async ({ searchParams }) => {
             {error?.message || "Failed to fetch questions"}
           </p>
         </div>
-      )}
+      )} */}
     </>
   );
 };

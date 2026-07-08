@@ -57,7 +57,7 @@ const TagCard = ({
         {Content}
       </button>
     ) : (
-      <Link href={Routes.Tags(_id)} className="flex justify-between gap-2">
+      <Link href={Routes.Tag(_id)} className="flex justify-between gap-2">
         {/* <Badge className="bg-gray-700 text-orange-500 px-2 py-3 mt-1 uppercase rounded">
           <div className="flex items-center gap-3">
             <i className={`${iconClass} text-md`}></i>
