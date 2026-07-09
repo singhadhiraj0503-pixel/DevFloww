@@ -3,8 +3,15 @@ import Link from "next/link";
 import React from "react";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
-const UserAvatar = ({ id, name, imageUrl, className = "w-9 h-9" }) => {
+const UserAvatar = ({
+  id,
+  name,
+  imageUrl,
+  className = "w-9 h-9",
+  fallbackClassname,
+}) => {
   const initials = name
     .split(" ")
     .map((word) => word[0])
@@ -25,7 +32,12 @@ const UserAvatar = ({ id, name, imageUrl, className = "w-9 h-9" }) => {
             quality={100}
           />
         ) : (
-          <AvatarFallback className="primary-gradient font-space-grotesk font-bold tracking-wider text-white">
+          <AvatarFallback
+            className={cn(
+              "primary-gradient font-space-grotesk font-bold tracking-wider text-white",
+              fallbackClassname,
+            )}
+          >
             {initials}
           </AvatarFallback>
         )}

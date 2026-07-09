@@ -43,6 +43,7 @@ const QuestionCard = ({
           title={`asked ${getTimeStamp(createdAt)}`}
           href={Routes.Profile(author._id)}
           isAuthor
+          titleStyles="max-sm:hidden"
         />
         <div className="flex items-center gap-3">
           <Metric
