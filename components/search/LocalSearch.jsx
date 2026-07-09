@@ -6,7 +6,13 @@ import Image from "next/image";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { formUrlQuery, removeKeysFromQuery } from "@/lib/url";
 
-const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }) => {
+const LocalSearch = ({
+  route,
+  imgSrc,
+  placeholder,
+  otherClasses,
+  iconPosition = "left",
+}) => {
   const searchParams = useSearchParams();
   const query = searchParams.get("query") || "";
   const router = useRouter();
@@ -39,13 +45,15 @@ const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }) => {
   return (
     <div className={`w-full flex items-center gap-2 ${otherClasses}`}>
       {/* {searchParams.toString()} */}
-      <Image
-        src={imgSrc}
-        width={22}
-        height={22}
-        alt="Search"
-        className="cursor-pointer"
-      />
+      {iconPosition === "left" && (
+        <Image
+          src={imgSrc}
+          width={22}
+          height={22}
+          alt="Search"
+          className="cursor-pointer"
+        />
+      )}
       <Input
         type="text"
         placeholder={placeholder}
@@ -55,6 +63,16 @@ const LocalSearch = ({ route, imgSrc, placeholder, otherClasses }) => {
         }}
         className="rounded outline-none"
       />
+
+      {iconPosition === "right" && (
+        <Image
+          src={imgSrc}
+          width={15}
+          height={15}
+          alt="Search"
+          className="cursor-pointer"
+        />
+      )}
     </div>
   );
 };

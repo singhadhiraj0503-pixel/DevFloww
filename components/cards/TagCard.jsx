@@ -4,7 +4,7 @@ import Routes from "@/constants/routes";
 import Link from "next/link";
 import React from "react";
 import { Badge } from "../ui/badge";
-import { getDevIconClassName } from "@/lib/utils";
+import { cn, getDevIconClassName, getTechDescription } from "@/lib/utils";
 import { Button } from "../ui/button";
 import Image from "next/image";
 
@@ -19,6 +19,7 @@ const TagCard = ({
   handleRemove,
 }) => {
   const iconClass = getDevIconClassName(name);
+  const iconDescription = getTechDescription(name);
 
   const handleClick = (e) => {
     e.preventDefault();
@@ -69,6 +70,27 @@ const TagCard = ({
       </Link>
     );
   }
+
+  return (
+    <Link href={Routes.Tag(_id)}>
+      <article className="w-full flex flex-col rounded-2xl border bg-gray-800 px-8 py-10 sm:w-[260px]">
+        <div className="flex justify-between items-center gap-3">
+          <div className="w-fit rounded-sm px-5 py-1.5 bg-gray-500">
+            <p className="font-semibold text-lg">{name}</p>
+          </div>
+          <i className={cn(iconClass, "text-2xl")} aria-hidden="true" />
+        </div>
+        <p className="w-full mt-3 line-clamp-3">{iconDescription}</p>
+
+        <p className="mt-3.5 text-lg">
+          <span className="font-semibold text-xl text-orange-500 mr-2.5">
+            {question}+
+          </span>
+          Questions
+        </p>
+      </article>
+    </Link>
+  );
 };
 
 export default TagCard;
