@@ -2,7 +2,7 @@
 
 import { AnswerSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -15,6 +15,8 @@ import dynamic from "next/dynamic";
 import { Button } from "../ui/button";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+import { createAnswer } from "@/lib/actions/answer.action";
+import { toast } from "sonner";
 // import Editor from "../editor";
 
 const Editor = dynamic(() => import("@/components/editor/index"), {
@@ -22,8 +24,8 @@ const Editor = dynamic(() => import("@/components/editor/index"), {
   ssr: false,
 });
 
-const AnswerForm = () => {
-  const [isSubmitting, setisSubmitting] = useState(false);
+const AnswerForm = ({ questionId }) => {
+  const [isAnswering, startAnsweringTransition] = useTransition();
   const [isAISubmitting, setisAISubmitting] = useState(false);
 
   const editorRef = useRef(null);
@@ -36,7 +38,19 @@ const AnswerForm = () => {
   });
 
   const handleSubmit = async (values) => {
-    console.log(values);
+    startAnsweringTransition(async () => {
+      const result = await createAnswer({
+        questionId,
+        content: values.content,
+      });
+
+      if (result.success) {
+        form.reset();
+        toast.success("Answer posted Successfully");
+      } else {
+        toast.error(result.error?.message || "Failed posting Answer");
+      }
+    });
   };
 
   return (
@@ -95,9 +109,9 @@ const AnswerForm = () => {
           <div className="flex justify-center">
             <Button
               type="submit"
-              className="w-fit font-semibold bg-orange-500 text-white rounded active:scale-95 text-lg py-2"
+              className="w-fit font-semibold bg-orange-500 text-white rounded active:scale-95 text-lg py-2 cursor-pointer"
             >
-              {isSubmitting ? (
+              {isAnswering ? (
                 <>
                   <ReloadIcon className="mr-2 size-4 animate-spin" />
                   Posting...

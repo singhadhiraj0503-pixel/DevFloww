@@ -36,7 +36,7 @@ const Editor = ({ value, editorRef, fieldChange, ...props }) => {
 
   return (
     <MDXEditor
-      className="custom-mdx-editor border-2 h-[300px] rounded"
+      className="custom-mdx-editor border-2 h-[300px] rounded overflow-y-auto"
       key={resolvedTheme}
       markdown={value}
       onChange={fieldChange}
