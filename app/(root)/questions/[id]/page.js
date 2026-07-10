@@ -4,6 +4,7 @@ import AnswerForm from "@/components/forms/AnswerForm";
 import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import Routes from "@/constants/routes";
+import { getAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { getTimeStamp } from "@/lib/url";
 import { formatNumber } from "@/lib/utils";
@@ -179,6 +180,19 @@ const QuestionDetails = async ({ params }) => {
   });
 
   if (!success || !question) return redirect("/404");
+
+  const {
+    success: areAnswersLoaded,
+    error: answersError,
+    data: answersResult,
+  } = await getAnswers({
+    questionId: id,
+    page: 1,
+    pageSize: 10,
+    filter: "latest",
+  });
+
+  console.log("ANSWERS", answersResult);
 
   const { author, createdAt, answers, views, tags, content, title } = question;
 
