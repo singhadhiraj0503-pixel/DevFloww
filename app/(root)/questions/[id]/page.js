@@ -1,15 +1,16 @@
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
+import AnswerForm from "@/components/forms/AnswerForm";
 import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import Routes from "@/constants/routes";
-import { getQuestion } from "@/lib/actions/question.action";
+import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { getTimeStamp } from "@/lib/url";
 import { formatNumber } from "@/lib/utils";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { after } from "next/server";
 import React from "react";
-import View from "../View";
 
 export const sampleQuestion = {
   _id: "64f7b8d9e2c4a9f1b6d8e123",
@@ -164,13 +165,25 @@ const QuestionDetails = async ({ params }) => {
   const { id } = await params;
   const { success, data: question } = await getQuestion({ questionId: id });
 
+  //Approch 1 of views was - View component [ View.jsx ] in /app/(root)/questions/View.jsx
+
+  //Apporach 2 ( views ) - use Promise.all
+  // const [_, { success, data: question }] = await Promise.all([
+  //   await incrementViews({ questionId: id }),
+  //   await getQuestion({ questionId: id }),
+  // ]);
+
+  //Approach 3 ( views ) - after() *currently using in the project*
+  after(async () => {
+    await incrementViews({ questionId: id });
+  });
+
   if (!success || !question) return redirect("/404");
 
   const { author, createdAt, answers, views, tags, content, title } = question;
 
   return (
     <>
-      <View questionId={id} />
       <div className="w-full flex-start flex-col">
         <div className="w-full flex flex-col-reverse justify-between">
           <div className="flex items-center justify-start gap-1">
@@ -229,6 +242,10 @@ const QuestionDetails = async ({ params }) => {
           );
         })}
       </div>
+
+      <section className="my-5">
+        <AnswerForm />
+      </section>
     </>
   );
 };
