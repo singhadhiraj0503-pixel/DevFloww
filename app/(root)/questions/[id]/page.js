@@ -9,6 +9,7 @@ import { formatNumber } from "@/lib/utils";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
+import View from "../View";
 
 export const sampleQuestion = {
   _id: "64f7b8d9e2c4a9f1b6d8e123",
@@ -169,6 +170,7 @@ const QuestionDetails = async ({ params }) => {
 
   return (
     <>
+      <View questionId={id} />
       <div className="w-full flex-start flex-col">
         <div className="w-full flex flex-col-reverse justify-between">
           <div className="flex items-center justify-start gap-1">
