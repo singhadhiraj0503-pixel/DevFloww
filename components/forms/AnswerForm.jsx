@@ -17,6 +17,8 @@ import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
 import { createAnswer } from "@/lib/actions/answer.action";
 import { toast } from "sonner";
+import { useSession } from "next-auth/react";
+import { api } from "@/lib/api";
 // import Editor from "../editor";
 
 const Editor = dynamic(() => import("@/components/editor/index"), {
@@ -24,9 +26,10 @@ const Editor = dynamic(() => import("@/components/editor/index"), {
   ssr: false,
 });
 
-const AnswerForm = ({ questionId }) => {
+const AnswerForm = ({ questionId, questionTitle, questionContent }) => {
   const [isAnswering, startAnsweringTransition] = useTransition();
   const [isAISubmitting, setisAISubmitting] = useState(false);
+  const session = useSession();
 
   const editorRef = useRef(null);
 
@@ -47,10 +50,51 @@ const AnswerForm = ({ questionId }) => {
       if (result.success) {
         form.reset();
         toast.success("Answer posted Successfully");
+
+        if (editorRef.current) {
+          editorRef.current.setMarkdown("");
+        }
       } else {
         toast.error(result.error?.message || "Failed posting Answer");
       }
     });
+  };
+
+  const generateAIAnswer = async () => {
+    if (session.status !== "authenticated") {
+      return toast.error("Please log in");
+    }
+
+    setisAISubmitting(true);
+
+    const userAnswer = editorRef.current?.getMarkdown();
+
+    try {
+      const { success, data, error } = await api.ai.getAnswer(
+        questionTitle,
+        questionContent,
+        userAnswer,
+      );
+
+      if (!success) {
+        return toast.error(error?.message || "Error");
+      }
+
+      const formattedAnswer = data.replace(/<br>/g, " ").toString().trim();
+
+      if (editorRef.current) {
+        editorRef.current.setMarkdown(formattedAnswer);
+
+        form.setValue("content", formattedAnswer);
+        form.trigger("content");
+      }
+
+      toast.success("AI Answer Generated Successfully");
+    } catch (error) {
+      toast.error(error.message || "There was a problem with your request.");
+    } finally {
+      setisAISubmitting(false);
+    }
   };
 
   return (
@@ -60,6 +104,7 @@ const AnswerForm = ({ questionId }) => {
         <Button
           className="btn rounded active:scale-95 font-semibold bg-gray-800 text-orange-500 text-lg hover:text-black"
           disabled={isAISubmitting}
+          onClick={generateAIAnswer}
         >
           {isAISubmitting ? (
             <>
