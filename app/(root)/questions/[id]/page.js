@@ -8,12 +8,13 @@ import Votes from "@/components/votes/Votes";
 import Routes from "@/constants/routes";
 import { getAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
+import { hasVoted } from "@/lib/actions/vote.action";
 import { getTimeStamp } from "@/lib/url";
 import { formatNumber } from "@/lib/utils";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
-import React from "react";
+import React, { Suspense } from "react";
 
 export const sampleQuestion = {
   _id: "64f7b8d9e2c4a9f1b6d8e123",
@@ -194,6 +195,11 @@ const QuestionDetails = async ({ params }) => {
     filter: "latest",
   });
 
+  const hasVotedPromise = hasVoted({
+    targetId: question._id,
+    targetType: "question",
+  });
+
   console.log("ANSWERS", answersResult);
 
   const { author, createdAt, answers, views, tags, content, title } = question;
@@ -216,12 +222,17 @@ const QuestionDetails = async ({ params }) => {
           </div>
 
           <div className="flex justify-end">
-            <Votes
-              upvotes={question.upvotes}
-              hasupVoted={true}
-              downvotes={question.downvotes}
-              hasdownVotes={false}
-            />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Votes
+                upvotes={question.upvotes}
+                // hasupVoted={true}
+                downvotes={question.downvotes}
+                // hasdownVotes={false}
+                hasVotedPromise={hasVotedPromise}
+                targetId={question._id}
+                targetType="question"
+              />
+            </Suspense>
           </div>
         </div>
 
