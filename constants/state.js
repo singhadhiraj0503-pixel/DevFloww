@@ -47,3 +47,13 @@ export const EMPTY_COLLECTIONS = {
     href: Routes.Collection,
   },
 };
+
+export const EMPTY_ANSWERS = {
+  title: "No Answers Found",
+  message:
+    "The answer board is empty. Make it rain with your brilliant answers",
+  // button: {
+  //   text: "Answer",
+  //   href: Routes.Home,
+  // },
+};
