@@ -57,3 +57,8 @@ export const EMPTY_ANSWERS = {
   //   href: Routes.Home,
   // },
 };
+
+export const EMPTY_USERS = {
+  title: "No Users Found",
+  message: "You're ALONE. The only one here. More users are comming soon!",
+};
