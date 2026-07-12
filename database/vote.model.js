@@ -7,11 +7,11 @@ const voteSchema = new Schema(
       ref: "Users",
       required: [true, "Author is required"],
     },
-    id: {
+    actionId: {
       type: Schema.Types.ObjectId,
       required: true,
     },
-    type: {
+    actionType: {
       type: String,
       enum: ["question", "answer"],
       required: true,
