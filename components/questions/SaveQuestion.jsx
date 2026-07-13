@@ -3,12 +3,16 @@
 import { toggleSaveQuestion } from "@/lib/actions/collection.action";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { toast } from "sonner";
 
-const SaveQuestion = ({ questionId }) => {
+const SaveQuestion = ({ questionId, hasSavedQuestionPromise }) => {
   const session = useSession();
   const userId = session?.data?.user?.id;
+
+  const { data } = use(hasSavedQuestionPromise);
+
+  const { saved: hasSaved } = data || {};
 
   const [isLoading, setisLoading] = useState(false);
 
@@ -35,7 +39,7 @@ const SaveQuestion = ({ questionId }) => {
     }
   };
 
-  const hasSaved = false;
+  // const hasSaved = false;
 
   return (
     <Image
