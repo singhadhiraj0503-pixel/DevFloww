@@ -1,6 +1,6 @@
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRender from "@/components/DataRender";
-import HomeFilter from "@/components/filter/HomeFilter";
+import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import Routes from "@/constants/routes";
