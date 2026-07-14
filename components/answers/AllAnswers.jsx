@@ -2,6 +2,8 @@ import React from "react";
 import DataRender from "../DataRender";
 import { EMPTY_ANSWERS } from "@/constants/state";
 import AnswerCard from "../cards/AnswerCard";
+import CommonFilter from "../filters/CommonFilter";
+import { AnswerFilters } from "@/constants/filters";
 
 const AllAnswers = ({ data, success, error, totalAnswers }) => {
   return (
@@ -10,7 +12,12 @@ const AllAnswers = ({ data, success, error, totalAnswers }) => {
         <h3 className="font-bold text-lg text-orange-500">
           {totalAnswers} {totalAnswers === 1 ? "Answer" : "Answers"}
         </h3>
-        <p>filters</p>
+
+        <CommonFilter
+          filters={AnswerFilters}
+          otherClasses="sm:min-w-15"
+          containerClasses="max-xs:w-full"
+        />
       </div>
 
       <DataRender

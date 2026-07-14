@@ -1,8 +1,10 @@
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRender from "@/components/DataRender";
+import CommonFilter from "@/components/filters/CommonFilter";
 import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
+import { CollectionFilters } from "@/constants/filters";
 import Routes from "@/constants/routes";
 import { EMPTY_QUESTION } from "@/constants/state";
 import { getSavedQuestions } from "@/lib/actions/collection.action";
@@ -26,13 +28,18 @@ const Collection = async ({ searchParams }) => {
     <>
       <h1 className="text-2xl mt-4">Saved Questions</h1>
 
-      <div className="w-full flex flex-col gap-5 mt-5">
+    <div className="w-full flex gap-5 mt-5 max-sm:flex max-sm:flex-col">
         <LocalSearch
           route={Routes.Collection}
           imgSrc="/icons/search.svg"
           placeholder="Search Questions..."
           otherClasses="flex-1"
           iconPosition="left"
+        />
+
+        <CommonFilter
+          filters={CollectionFilters}
+          otherClasses="min-h-[20px] sm:min-w-[170px]"
         />
       </div>
       {/* <HomeFilter /> */}

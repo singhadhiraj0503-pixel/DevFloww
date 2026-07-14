@@ -72,7 +72,7 @@ const TagCard = ({
   }
 
   return (
-    <Link href={Routes.Tag(_id)}>
+    <Link href={Routes.Tag(_id)} className="">
       <article className="w-full flex flex-col rounded-2xl border bg-gray-800 px-8 py-10 sm:w-[260px]">
         <div className="flex justify-between items-center gap-3">
           <div className="w-fit rounded-sm px-5 py-1.5 bg-gray-500">
