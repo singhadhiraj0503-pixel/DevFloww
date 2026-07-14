@@ -4,8 +4,9 @@ import { EMPTY_ANSWERS } from "@/constants/state";
 import AnswerCard from "../cards/AnswerCard";
 import CommonFilter from "../filters/CommonFilter";
 import { AnswerFilters } from "@/constants/filters";
+import Pagination from "../Pagination";
 
-const AllAnswers = ({ data, success, error, totalAnswers }) => {
+const AllAnswers = ({ page, isNext, data, success, error, totalAnswers }) => {
   return (
     <div className="mt-11">
       <div className="flex justify-between items-center">
@@ -31,6 +32,8 @@ const AllAnswers = ({ data, success, error, totalAnswers }) => {
           })
         }
       />
+
+      <Pagination page={page} isNext={isNext} />
     </div>
   );
 };

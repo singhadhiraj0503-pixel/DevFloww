@@ -2,6 +2,7 @@ import QuestionCard from "@/components/cards/QuestionCard";
 import DataRender from "@/components/DataRender";
 import CommonFilter from "@/components/filters/CommonFilter";
 import HomeFilter from "@/components/filters/HomeFilter";
+import Pagination from "@/components/Pagination";
 import LocalSearch from "@/components/search/LocalSearch";
 import { Button } from "@/components/ui/button";
 import { CollectionFilters } from "@/constants/filters";
@@ -22,13 +23,13 @@ const Collection = async ({ searchParams }) => {
     filter: filter || "",
   });
 
-  const { collection } = data || {};
+  const { collection, isNext } = data || {};
 
   return (
     <>
       <h1 className="text-2xl mt-4">Saved Questions</h1>
 
-    <div className="w-full flex gap-5 mt-5 max-sm:flex max-sm:flex-col">
+      <div className="w-full flex gap-5 mt-5 max-sm:flex max-sm:flex-col">
         <LocalSearch
           route={Routes.Collection}
           imgSrc="/icons/search.svg"
@@ -57,6 +58,8 @@ const Collection = async ({ searchParams }) => {
           </div>
         )}
       />
+
+      <Pagination page={page} isNext={isNext || false} />
 
       {/* {success ? (
         <div className="w-full flex flex-col gap-5 mt-5">
