@@ -8,12 +8,10 @@ import DataRender from "../DataRender";
 import { getTopTags } from "@/lib/actions/tag.action";
 
 const RightSidebar = async () => {
-  const { success, data: hotQuestions, error } = await getHotQuestions();
-  const {
-    success: tagSuccess,
-    data: tags,
-    error: tagError,
-  } = await getTopTags();
+  const [
+    { success, data: hotQuestions, error },
+    { success: tagSuccess, data: tags, error: tagError },
+  ] = await Promise.all([getHotQuestions(), getTopTags()]);
 
   return (
     // <section className="pt-18 w-100 h-screen bg-gray-900 flex flex-col overflow-y-auto border-l max-lg:hidden">
