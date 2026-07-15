@@ -15,6 +15,7 @@ import {
 import Image from "next/image";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { deleteQuestion } from "@/lib/actions/question.action";
 
 const EditDeleteAction = ({ type, itemId }) => {
   const router = useRouter();
@@ -25,6 +26,8 @@ const EditDeleteAction = ({ type, itemId }) => {
 
   const handleDelete = async () => {
     if (type === "Question") {
+      await deleteQuestion({ questionId: itemId });
+
       toast.success("Question deleted successfully");
     } else if (type === "Answer") {
       toast.success("Answer deleted successfully");
