@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Profile = async ({ params }) => {
   const { id } = await params;
@@ -93,6 +94,35 @@ const Profile = async ({ params }) => {
           BRONZE: 0,
         }}
       />
+
+      <section className="mt-10 flex gap-10">
+        <Tabs defaultValue="top-posts" className="flex-[2]">
+          <TabsList className="min-h-[42px] p-1">
+            <TabsTrigger className="tab" value="top-posts">
+              Top Posts
+            </TabsTrigger>
+            <TabsTrigger className="tab" value="answers">
+              Answers
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent
+            value="top-posts"
+            className="mt-5 w-full flex flex-col gap-6"
+          >
+            List of Questions
+          </TabsContent>
+          <TabsContent value="answers" className="w-full flex flex-col gap-6">
+            List of Answers
+          </TabsContent>
+        </Tabs>
+
+        <div className="w-full min-w-[250px] flex flex-1 flex-col max-lg:hidden">
+          <h3 className="font-bold text-xl">Top Tags</h3>
+          <div className="mt-7 flex flex-col gap-4">
+            <p>List of Tags</p>
+          </div>
+        </div>
+      </section>
     </>
   );
 };
