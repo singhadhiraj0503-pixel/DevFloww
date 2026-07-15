@@ -6,6 +6,7 @@ import { getTimeStamp } from "@/lib/url";
 import Preview from "../editor/Preview";
 import Votes from "../votes/Votes";
 import { hasVoted } from "@/lib/actions/vote.action";
+import { cn } from "@/lib/utils";
 
 const AnswerCard = ({
   _id,
@@ -14,12 +15,15 @@ const AnswerCard = ({
   createdAt,
   upvotes,
   downvotes,
+  question,
+  containerClasses,
+  showReadMore = false,
 }) => {
   const hasVotedPromise = hasVoted({ targetId: _id, targetType: "answer" });
 
   return (
-    <article className="light-border border-b py-10">
-      <span id={JSON.stringify(_id)} className="" />
+    <article className={cn("light-border border-b py-10", containerClasses)}>
+      <span id={`answer-${_id}`} className="" />
 
       <div className="mb-5 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
         <div className="flex flex-1 items-start gap-2 sm:items-center">
@@ -59,6 +63,15 @@ const AnswerCard = ({
       </div>
 
       <Preview content={content} />
+
+      {showReadMore && (
+        <Link
+          href={`/questions/${question}#answer-${_id}`}
+          className="font-semibold relative z-10 text-orange-500"
+        >
+          <p className="mt-1">Read More...</p>
+        </Link>
+      )}
     </article>
   );
 };
