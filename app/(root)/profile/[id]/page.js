@@ -7,6 +7,7 @@ import {
   getUser,
   getUserAnswers,
   getUserQuestions,
+  getUserTopTags,
 } from "@/lib/actions/user.action";
 import dayjs from "dayjs";
 import Link from "next/link";
@@ -14,10 +15,11 @@ import { notFound } from "next/navigation";
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DataRender from "@/components/DataRender";
-import { EMPTY_ANSWERS, EMPTY_QUESTION } from "@/constants/state";
+import { EMPTY_ANSWERS, EMPTY_QUESTION, EMPTY_TAGS } from "@/constants/state";
 import QuestionCard from "@/components/cards/QuestionCard";
 import Pagination from "@/components/Pagination";
 import AnswerCard from "@/components/cards/AnswerCard";
+import TagCard from "@/components/cards/TagCard";
 
 const Profile = async ({ params, searchParams }) => {
   const { id } = await params;
@@ -61,6 +63,16 @@ const Profile = async ({ params, searchParams }) => {
   });
 
   const { answers, isNext: hasMoreAnswers } = userAnswers;
+
+  const {
+    success: userTopTagsSuccess,
+    data: userTopTags,
+    error: userTopTagsError,
+  } = await getUserTopTags({
+    userId: id,
+  });
+
+  const { tags } = userTopTags;
 
   const { _id, name, image, portfolio, location, createdAt, username, bio } =
     user;
@@ -197,7 +209,30 @@ const Profile = async ({ params, searchParams }) => {
         <div className="w-full min-w-[250px] flex flex-1 flex-col max-lg:hidden">
           <h3 className="font-bold text-xl">Top Tags</h3>
           <div className="mt-7 flex flex-col gap-4">
-            <p>List of Tags</p>
+            <DataRender
+              data={tags}
+              empty={EMPTY_TAGS}
+              success={userTopTagsSuccess}
+              error={userTopTagsError}
+              render={() => {
+                return (
+                  <div className="w-full flex flex-col gap-4 mt-3">
+                    {tags.map((tag) => {
+                      return (
+                        <TagCard
+                          key={tag._id}
+                          _id={tag._id}
+                          name={tag.name}
+                          question={tag.count}
+                          showCount
+                          compact
+                        />
+                      );
+                    })}
+                  </div>
+                );
+              }}
+            />
           </div>
         </div>
       </section>

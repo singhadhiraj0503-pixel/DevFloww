@@ -9,7 +9,7 @@ const Stats = ({ totalQuestions, totalAnswers, badges }) => {
         <Image src={imgUrl} alt={title} width={40} height={50} />
 
         <div className="text-[0.7rem]">
-          <p className="font-semibold">{value}</p>
+          <p className="font-semibold text-xl">{value}</p>
           <p>{title}</p>
         </div>
       </div>
@@ -23,12 +23,16 @@ const Stats = ({ totalQuestions, totalAnswers, badges }) => {
       <div className="mt-5 grid grid-cols-1 gap-5 xs:grid-cols-2 md:grid-cols-4">
         <div className="flex flex-wrap items-center justify-evenly rounded-md border p-6 gap-4 bg-gray-700 text-white">
           <div>
-            <p className="font-semibold">{formatNumber(totalQuestions)}</p>
+            <p className="font-semibold text-xl">
+              {formatNumber(totalQuestions)}
+            </p>
             <p className="">Questions</p>
           </div>
 
           <div>
-            <p className="font-semibold">{formatNumber(totalAnswers)}</p>
+            <p className="font-semibold text-xl">
+              {formatNumber(totalAnswers)}
+            </p>
             <p className="">Answers</p>
           </div>
         </div>
