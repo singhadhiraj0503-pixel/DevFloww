@@ -7,6 +7,7 @@ import Preview from "../editor/Preview";
 import Votes from "../votes/Votes";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { cn } from "@/lib/utils";
+import EditDeleteAction from "../user/EditDeleteAction";
 
 const AnswerCard = ({
   _id,
@@ -18,12 +19,21 @@ const AnswerCard = ({
   question,
   containerClasses,
   showReadMore = false,
+  showActionBtns = false,
 }) => {
   const hasVotedPromise = hasVoted({ targetId: _id, targetType: "answer" });
 
   return (
-    <article className={cn("light-border border-b py-10", containerClasses)}>
+    <article
+      className={cn("light-border border-b py-10 relative", containerClasses)}
+    >
       <span id={`answer-${_id}`} className="" />
+
+      {showActionBtns && (
+        <div className="flex items-center justify-center absolute -right-2 -top-5 size-9 rounded-full">
+          <EditDeleteAction type="Answer" itemId={_id} />
+        </div>
+      )}
 
       <div className="mb-5 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
         <div className="flex flex-1 items-start gap-2 sm:items-center">

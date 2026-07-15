@@ -4,13 +4,15 @@ import Link from "next/link";
 import React from "react";
 import TagCard from "./TagCard";
 import Metric from "../Metric";
+import EditDeleteAction from "../user/EditDeleteAction";
 
 const QuestionCard = ({
   question: { _id, title, tags, author, createdAt, upvotes, answers, views },
+  showActionBtns = false,
 }) => {
   return (
     <div className="w-full bg-gray-700 rounded">
-      <div className="rounded">
+      <div className="rounded flex items-center justify-center">
         <div className="w-full px-6 py-3">
           <span className="text-xsm opacity-70 max-sm:hidden">
             {getTimeStamp(createdAt)}
@@ -21,7 +23,10 @@ const QuestionCard = ({
             </h3>
           </Link>
         </div>
+
+        {showActionBtns && <EditDeleteAction type="Question" itemId={_id} />}
       </div>
+
       <div className="px-6 flex items-center">
         {tags.map((tag) => {
           return (

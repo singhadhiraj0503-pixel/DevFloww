@@ -166,7 +166,13 @@ const Profile = async ({ params, searchParams }) => {
                   <div className="w-full flex flex-col gap-6">
                     {questions.map((question) => {
                       return (
-                        <QuestionCard key={question._id} question={question} />
+                        <QuestionCard
+                          key={question._id}
+                          question={question}
+                          showActionBtns={
+                            loggedInUser?.user?.id === question.author._id
+                          }
+                        />
                       );
                     })}
                   </div>
@@ -185,7 +191,7 @@ const Profile = async ({ params, searchParams }) => {
               error={userAnswersError}
               render={() => {
                 return (
-                  <div className="w-full flex flex-col gap-6">
+                  <div className="w-full flex flex-col gap-10">
                     {answers.map((answer) => {
                       return (
                         <AnswerCard
@@ -194,6 +200,9 @@ const Profile = async ({ params, searchParams }) => {
                           content={answer.content.slice(0, 27)}
                           containerClasses="card-wrapper rounded-[10px] px-7 py-9 sm:px-11"
                           showReadMore
+                          showActionBtns={
+                            loggedInUser?.user?.id === answer.author._id
+                          }
                         />
                       );
                     })}
