@@ -8,21 +8,21 @@ import { formUrlQuery, removeKeysFromQuery } from "@/lib/url";
 
 const filters = [
   {
-    name: "React",
-    value: "react",
+    name: "Newest",
+    value: "newest",
   },
   {
-    name: "NextJS",
-    value: "nextjs",
+    name: "Popular",
+    value: "popular",
   },
-  //   {
-  //     name: "Unanswered",
-  //     value: "unanswered",
-  //   },
-  //   {
-  //     name: "Recommended",
-  //     value: "recommended",
-  //   },
+  {
+    name: "Unanswered",
+    value: "unanswered",
+  },
+  {
+    name: "Recommended",
+    value: "recommended",
+  },
 ];
 
 const HomeFilter = () => {

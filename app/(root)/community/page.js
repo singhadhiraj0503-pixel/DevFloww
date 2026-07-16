@@ -12,6 +12,8 @@ import React from "react";
 const Community = async ({ searchParams }) => {
   const { page, pageSize, query, filter } = await searchParams;
 
+  throw new Error("This is a test error");
+
   const { success, data, error } = await getUsers({
     page: Number(page) || 1,
     pageSize: Number(pageSize) || 10,
