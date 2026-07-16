@@ -7,10 +7,10 @@ const Metric = ({ imgUrl, alt, value, title, href, isAuthor, titleStyles }) => {
   const metricContent = (
     <div className="flex items-center gap-2 pr-3">
       <Image
-        src={imgUrl}
+        src={imgUrl || "/images/site-logo.svg"}
         width={18}
         height={18}
-        alt={alt}
+        alt={alt || "icon"}
         className="rounded-full object-cover object-center"
       />
       <p>{value}</p>
